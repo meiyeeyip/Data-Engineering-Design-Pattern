@@ -1,0 +1,63 @@
+1) Full Load 
+involve complete dataset
+
+Pattern: Full Load
+Problem: data changes few times a week, small dataset, lack of last updated value, homogeneous dataset
+Solution: Extract and Load 
+Consequences: 
+
+a) Data volume: dynamic data voolume is a challenge
+b) Data consistency: overwrites data and might loss some data
+
+2) Incremental Load
+Pattern: Incremental Loader
+suitable for continuosly growing dataset
+
+Problem: need to integrate only new data, data are immutable
+Solution: 
+a) Delta column: to indentify rows added since the last run, eg: ingestion time
+b) time-partitioned datasets: tiome based to detect the whole nes chunk of data to be ingested.
+Consequences: 
+a) hard deletes:mutable data, if deletes, but can be overcomed using soft deletes or mark the new data as delete
+b) backfilling: need to do a one shot full load and may involves more rows, can limit the ingestion chunk by chunking it based on time
+
+Pattern: Change Data Capture
+-for lower ingestion latency, built-in support for physical deletes
+Problem: Incremental load is slow, if needed to be faster like every 30 seconds.
+Solution: take data from a commit log, can modify data based on it.
+Consequences: 
+
+a) more complex as needs orchestration layer
+b) only able to do this after starting the client process and previous data cannot be applied
+c) the payload may have other info, need to filter it out.
+c) data semantics, data might not be there yet if joins between 2 tables are required.
+
+3) Replication
+copy data from one location to another
+
+Pattern: Passthrough Replicator
+Problem: want to have the production dataset in dev and staging development.
+Solution: Extract and Loadjob based on a replication policy.
+Consequences: 
+a)keep it simple
+b) security issue in different environment
+c) Personal Indentifiable Information  (use Transformation Replicator pattern)
+d) Latency: infractructure based implementation will have latency, check with SLA on the permitted time frame
+e) Metadata: skipping the metadata might make the dataset unusable
+
+Pattern: Transformation Replicator
+
+Problem: Data contains PII
+Solution: 
+a) Custom Mapping Function
+b) SQL Select Statement
+Consequences:
+a) Transformation risk for text file formats.
+b) Desynchronization
+
+Reduce unnecessary columns
+
+Data Compaction
+Pattern: Compactor
+Problem: multiple smaall files causing metadata overhead problem. more execution time to list the files and lesser time on processing data, high latency 
+Solution:Store fewer files, 
