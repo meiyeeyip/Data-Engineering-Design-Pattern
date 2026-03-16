@@ -61,3 +61,19 @@ Data Compaction
 Pattern: Compactor
 Problem: multiple smaall files causing metadata overhead problem. more execution time to list the files and lesser time on processing data, high latency 
 Solution:Store fewer files, 
+Consequences:
+a) cost vs performance trade-offs
+b) might not be consistent
+c) have to clean up after the compaction job
+
+Data Readiness
+When is the data will be ready and when can I start the ingestion?
+Batch job might causes incomplete dataset
+
+Solution:
+1) Mark your data with Readiness Marker pattern
+-use flag file
+
+Consequences
+a) Lack of enforcement
+b) Late data not reliable
