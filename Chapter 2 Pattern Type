@@ -77,3 +77,12 @@ Solution:
 Consequences
 a) Lack of enforcement
 b) Late data not reliable
+
+Event Driven
+is ideal to use when incoming data is unpredictable
+Solution: use event-driven External Trigger Pattern to not waste resources to having to check new data input.
+
+1) Subscribe to a notification channel
+2) reacting to notifications
+3) trigger the ingestion pipelines
+
