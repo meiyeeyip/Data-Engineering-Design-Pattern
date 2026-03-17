@@ -1,0 +1,40 @@
+1) Unprocessable Records
+known as Poison Pill Messages, will stop the application, require manual intervention.
+
+
+two types of error: 
+Transcient errors-temporary, will eventually recover automatically.
+Non- transcient Error- not temporary, wil not recover by themselves. 
+
+
+DEAD LETTER PATTERN
+- identify where the code fails: custom mapping function, error-safe transformation. 
+- apply safety controlsL try-catch block. 
+- include the failed messages as the metadata  (Metadata Decorator pattern)
+- configure a different output for the erroneous events. (Dead letter storage) 
+
+Consequences
+1) Snowball backfilling effect
+consumer will continue to ingest partial data
+backfilling on upstream does not guarantee downstream pipeline will be re-run
+
+2) Dead-lettered records identification
+might need to identified whether this was dead lettered, add another column 'was_dead_lettered'
+
+3) Ordering & consistency
+-ordered might be messed up if data backfilling is re-run
+
+4) Error safe functions
+-reduced the risk of run time issue, not throw erro but return NULL value, might not be able to catch error hence missed an unprocessed record if it returns NULL. 
+
+
+2) Duplicated Records
+
+WINDOWED DECUPLICATOR
+1) Identify Deduplication attributes
+2) Define deduplication scope
+Batch job: currently processed dataset
+Streaming Job: create time-based windows.
+
+Take note of space vs time trade off
+- time window too short , might miss some duplicates, longer windows, takes up resources
