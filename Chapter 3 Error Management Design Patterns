@@ -14,17 +14,17 @@ DEAD LETTER PATTERN
 - configure a different output for the erroneous events. (Dead letter storage) 
 
 Consequences
-1) Snowball backfilling effect
+a) Snowball backfilling effect
 consumer will continue to ingest partial data
 backfilling on upstream does not guarantee downstream pipeline will be re-run
 
-2) Dead-lettered records identification
+b) Dead-lettered records identification
 might need to identified whether this was dead lettered, add another column 'was_dead_lettered'
 
-3) Ordering & consistency
+c) Ordering & consistency
 -ordered might be messed up if data backfilling is re-run
 
-4) Error safe functions
+d) Error safe functions
 -reduced the risk of run time issue, not throw erro but return NULL value, might not be able to catch error hence missed an unprocessed record if it returns NULL. 
 
 
@@ -38,3 +38,15 @@ Streaming Job: create time-based windows.
 
 Take note of space vs time trade off
 - time window too short , might miss some duplicates, longer windows, takes up resources
+
+
+3) Late Data
+
+LATE DATA DETECTOR
+a) identify one time based attribute to track late data.
+b) Define latency aggregation strategy - MAX function
+c) decide on additonal aggregation strategy
+
+
+STATIC LATE DATA INTEGRATOR
+DYNAMIC LATE DATA INTEGRATOR
