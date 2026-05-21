@@ -1,0 +1,47 @@
+Problem:
+
+
+errors--> automatic recovery --> retried task --> duplicates
+
+idempotency : how many times you run a processing job, you always get the same result , without duplicates
+
+Solution
+
+
+Overwriting
+-------------
+-remove data before writing data 
+
+Pattern 1:
+Fast Metadata Cleaner
+ DROP TABLE + TRUNCATE TABLE; better than delete as delete involves 2 steps. 
+
+when reaches the executionday, truncate or delete data, if not just insert data normally
+
+Gotchas:
+1) Have to backfill the whole week if one day is affected.
+2) Metadata limits --> can add a freezing step like making the data monthly /yearly after confirming no further changes
+3) Data not in single point anymore, need to group it those and expose as a single unit.
+4) Schema evolution- add new field.
+
+
+Pattern 2:
+Data Overwrite
+-sometimes metadata is not possible,
+-set a setting to clean the file before writing
+For example: SQL : DELETE FROM & INSERT INTO/ INSERT & OVERWRITE
+
+Gotchas:
+1) data overhead
+- data not partitioned might be too big to handle. --> should do some partitioning.
+2) might need a vacuum to 
+
+UPDATES
+---------
+
+Pattern: Merger
+-merge the new data into existing dataset
+
+Pattern: Stateful merger
+
+
